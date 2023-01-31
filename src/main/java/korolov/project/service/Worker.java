@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Class to process task to find the most total calories throw all elves
+ */
 public class Worker {
 
     private final String path = "input.txt";
@@ -47,6 +50,11 @@ public class Worker {
         }
     }
 
+    /**
+     * Finds max between old max and new value counted from input list.
+     *
+     * @param calories list of calories of one Elf
+     */
     private void findMax(List<Integer> calories) {
         var currentSum = calories.stream()
                 .mapToInt(Integer::intValue)
