@@ -4,17 +4,19 @@ package korolov.project.service;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 /**
- * Class to process task to find the most total calories throw all elves
+ * Class to process task to find 3 the most total calories throw all elves
  */
 public class Worker {
 
     private final String path = "input.txt";
 
-    private int maxCalories = 0;
+    private List<Integer> maxCalories = new ArrayList<>();
 
     public void work() {
 
@@ -28,14 +30,19 @@ public class Worker {
             while (scanner.hasNextLine()) {
                 String data = scanner.nextLine();
                 if (data.isBlank()) {
-                    findMax(calories);
+                    findThreeMax(calories);
                     calories = new ArrayList<>();
                 } else {
                     calories.add(Integer.parseInt(data));
                 }
             }
+            findThreeMax(calories); // to include last calories
 
-            System.out.println("MaxCallories: " + maxCalories);
+            for (int i = 0; i < 3 && i < maxCalories.size(); i++) {
+                System.out.println("MaxCallories: " + maxCalories.get(i));
+            }
+            System.out.println("Sum: " + maxCalories.stream().mapToInt(Integer::intValue).sum());
+
 
         } catch (FileNotFoundException fileNotFoundException) {
             System.out.println("An error while reading file occurred.");
@@ -55,13 +62,34 @@ public class Worker {
      *
      * @param calories list of calories of one Elf
      */
-    private void findMax(List<Integer> calories) {
+    private void findOneMax(List<Integer> calories) {
+
         var currentSum = calories.stream()
                 .mapToInt(Integer::intValue)
                 .sum();
 
-        if (currentSum > maxCalories) {
-            maxCalories = currentSum;
+        if (maxCalories.isEmpty()) {
+            maxCalories.add(currentSum);
+        } else {
+            if (currentSum > maxCalories.get(0)) {
+                maxCalories.set(0, currentSum);
+            }
+        }
+    }
+
+    private void findThreeMax(List<Integer> calories) {
+
+        var currentSum = calories.stream()
+                .mapToInt(Integer::intValue)
+                .sum();
+
+
+        if (maxCalories.isEmpty() || maxCalories.size() < 3) {
+            maxCalories.add(currentSum);
+        } else {
+            maxCalories.add(currentSum);
+            maxCalories.sort(Comparator.reverseOrder());
+            maxCalories = maxCalories.stream().limit(3).collect(Collectors.toList());
         }
     }
 }
