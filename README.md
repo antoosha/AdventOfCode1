@@ -1,4 +1,4 @@
-## Opmtimization
+## Optimization (we do not need lists)
 
 
 We can change processing to:
